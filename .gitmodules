@@ -1,0 +1,3 @@
+[submodule "2048-client"]
+	path = 2048-client
+	url = https://github.com/minhnhatnoe/2048-client
