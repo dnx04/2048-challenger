@@ -1,24 +1,27 @@
 import math
+import random
+
+M = 4 #kich thuoc cua bang 2048
 
 def CheckAvailableMove(board):
     xuong = False
-    for i in range(3):
-        for j in range(4):
+    for i in range(M-1):
+        for j in range(M):
             if board[i][j] != 0 and (board[i][j] == board[i+1][j] or board[i+1][j] == 0):
                 xuong = True
     phai = False
-    for i in range(4):
-        for j in range(3):
+    for i in range(M):
+        for j in range(M-1):
             if board[i][j] != 0 and (board[i][j] == board[i][j+1] or board[i][j+1] == 0):
                 phai = True
     len = False
-    for i in range(3,0,-1):
-        for j in range(4):
+    for i in range(M-1,0,-1):
+        for j in range(M):
             if board[i][j] != 0 and (board[i][j] == board[i-1][j] or board[i-1][j] == 0):
                 len = True
     trai = False
-    for i in range(4):
-        for j in range(3,0,-1):
+    for i in range(M):
+        for j in range(M-1,0,-1):
             if board[i][j] != 0 and (board[i][j] == board[i][j-1] or board[i][j-1] == 0):
                 trai = True
     return [len,xuong,trai,phai]
@@ -26,9 +29,9 @@ def CheckAvailableMove(board):
 
 def OperatingMove(board ,direction):
     if direction == 1:
-        for j in range(4):
+        for j in range(M):
             l = -1
-            for i in range(1,4):
+            for i in range(1,M):
                 if board[i][j] == 0:
                     continue
                 for k in range(i-1,l,-1):
@@ -46,9 +49,9 @@ def OperatingMove(board ,direction):
                     elif board[k][j] == 0:
                         continue
     elif direction == 2:
-        for i in range(2,-1,-1):
+        for i in range(M-2,-1,-1):
             l = 4
-            for j in range(4):
+            for j in range(M):
                 if board[i][j] == 0:
                     continue
                 for k in range(i+1,l):
@@ -66,9 +69,9 @@ def OperatingMove(board ,direction):
                     elif board[k][j] == 0:
                         continue
     elif direction == 3:
-        for i in range(4):
+        for i in range(M):
             l = -1
-            for j in range(1,4):
+            for j in range(1,M):
                 if board[i][j] == 0:
                     continue
                 for k in range(j-1,l,-1):
@@ -86,9 +89,9 @@ def OperatingMove(board ,direction):
                     elif board[i][k] == 0:
                         continue
     elif direction == 4:
-        for i in range(4):
+        for i in range(M):
             l = 4
-            for j in range(2,-1,-1):
+            for j in range(M-2,-1,-1):
                 if board[i][j] == 0:
                     continue
                 for k in range(j+1,l):
@@ -105,9 +108,22 @@ def OperatingMove(board ,direction):
                         break
                     elif board[i][k] == 0:
                         continue
+    probability = random.random()
+    if probability < 0.9:
+      value = 2
+    else:
+      value = 4
+    rand_list = []
+    for i in range(M):
+      for j in range(M):
+        if board[i][j] == 0:
+          rand_list.append([i,j])
+    rand_pair = random.choice(rand_list)
+    x, y = rand_pair[0], rand_pair[1]
+    board[x][y] = value
     return board
 
 
-'''CurBoard = [[2,2,4,8] , [4,4,4,4] , [0,2,2,4] , [4,2,2,4]]
-NewBoard = OperatingMove(CurBoard,3)
-print(NewBoard)'''
+CurBoard = [[2,2,4,8] , [4,4,4,4] , [0,2,2,4] , [4,2,2,4]]
+NewBoard = OperatingMove(CurBoard,4)
+print(NewBoard)
