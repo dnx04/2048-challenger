@@ -124,6 +124,6 @@ def OperatingMove(board ,direction):
     return board
 
 
-CurBoard = [[2,2,4,8] , [4,4,4,4] , [0,2,2,4] , [4,2,2,4]]
+'''CurBoard = [[2,2,4,8] , [4,4,4,4] , [0,2,2,4] , [4,2,2,4]]
 NewBoard = OperatingMove(CurBoard,4)
-print(NewBoard)
+print(NewBoard)'''
