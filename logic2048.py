@@ -5,27 +5,27 @@ M = 4  # kich thuoc cua bang 2048
 
 
 def CheckAvailableMove(board):
-    xuong = False
+    D = False
     for i in range(M - 1):
         for j in range(M):
             if board[i][j] != 0 and (board[i][j] == board[i + 1][j] or board[i + 1][j] == 0):
-                xuong = True
-    phai = False
+                D = True
+    R = False
     for i in range(M):
         for j in range(M - 1):
             if board[i][j] != 0 and (board[i][j] == board[i][j + 1] or board[i][j + 1] == 0):
-                phai = True
-    len = False
+                R = True
+    U = False
     for i in range(M - 1, 0, -1):
         for j in range(M):
             if board[i][j] != 0 and (board[i][j] == board[i - 1][j] or board[i - 1][j] == 0):
-                len = True
-    trai = False
+                U = True
+    L = False
     for i in range(M):
         for j in range(M - 1, 0, -1):
             if board[i][j] != 0 and (board[i][j] == board[i][j - 1] or board[i][j - 1] == 0):
-                trai = True
-    return [len, xuong, trai, phai]
+                L = True
+    return [U, D, L, R]
 
 
 def OperatingMove(board, direction):
@@ -49,7 +49,7 @@ def OperatingMove(board, direction):
                         break
                     elif board[k][j] == 0:
                         continue
-    elif direction == 2:
+    elif direction == 3:
         for i in range(M - 2, -1, -1):
             l = 4
             for j in range(M):
@@ -69,7 +69,7 @@ def OperatingMove(board, direction):
                         break
                     elif board[k][j] == 0:
                         continue
-    elif direction == 3:
+    elif direction == 0:
         for i in range(M):
             l = -1
             for j in range(1, M):
@@ -89,7 +89,7 @@ def OperatingMove(board, direction):
                         break
                     elif board[i][k] == 0:
                         continue
-    elif direction == 4:
+    elif direction == 2:
         for i in range(M):
             l = 4
             for j in range(M - 2, -1, -1):
