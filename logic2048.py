@@ -25,7 +25,7 @@ def CheckAvailableMove(board):
         for j in range(M - 1, 0, -1):
             if board[i][j] != 0 and (board[i][j] == board[i][j - 1] or board[i][j - 1] == 0):
                 L = True
-    return [U, D, L, R]
+    return [L,U,R,D]
 
 
 def OperatingMove(board, direction):
