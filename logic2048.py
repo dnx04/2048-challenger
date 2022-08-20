@@ -38,7 +38,7 @@ def CheckAvailableMove(board):
 
 def IsGameOver(board):
     chk = CheckAvailableMove(board)
-    return all(not i for i in chk)
+    return all(mv == False for mv in chk)
 
 def SpawnTile(board):
     if not IsGameOver(board):
@@ -51,11 +51,10 @@ def SpawnTile(board):
         for i in range(len(board)):
             for j in range(len(board)):
                 if board[i][j] == 0:
-                    rand_list.append([i, j])
+                    rand_list.append((i, j))
         rand_pair = random.choice(rand_list)
         x, y = rand_pair[0], rand_pair[1]
         board[x][y] = value
-        return board
 
 def OperatingMove(board, direction):
     if direction == 1:
@@ -138,7 +137,6 @@ def OperatingMove(board, direction):
                         break
                     elif board[i][k] == 0:
                         continue
-    return board
 
 def GetScore(board):
     return sum(sum(i) for i in board)
