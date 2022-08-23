@@ -9,6 +9,7 @@ import math
 import time
 import os
 import game
+import numpy as np
 
 # Enable multithreading?
 MULTITHREAD = True
@@ -54,10 +55,7 @@ def to_score(m):
     return [[_to_score(c) for c in row] for row in m]
 
 def print_board(m):
-    for row in m:
-        for c in row:
-            print('%8d' % c, end=' ')
-        print()
+    print(np.array(m))
 
 if MULTITHREAD:
     from multiprocessing.pool import ThreadPool
@@ -87,6 +85,7 @@ def play_game():
     while client.playing:
         data = client.get_state()
         if isinstance(data, game.Board):
+            print_board(data.board)
             for i in range(4):
                 for j in range(4):
                     if data.board[i][j] != 0:

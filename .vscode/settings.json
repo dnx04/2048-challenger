@@ -3,4 +3,7 @@
     "editor.formatOnSave": true,
     "editor.formatOnPaste": true,
     "editor.wordBasedSuggestions": true,
+    "files.associations": {
+        "limits": "cpp"
+    },
 }
