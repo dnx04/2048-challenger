@@ -9,7 +9,6 @@ import math
 import time
 import os
 import game
-import numpy as np
 
 # Enable multithreading?
 MULTITHREAD = True
@@ -54,9 +53,6 @@ def _to_score(c):
 def to_score(m):
     return [[_to_score(c) for c in row] for row in m]
 
-def print_board(m):
-    print(np.array(m))
-
 if MULTITHREAD:
     from multiprocessing.pool import ThreadPool
     pool = ThreadPool(4)
@@ -78,24 +74,3 @@ else:
 def movename(move):
     return ['up', 'down', 'left', 'right'][move]
 
-def play_game():
-    account = "ayakain5rolls"
-    quiz = 1
-    client = game.Client(account, quiz)
-    while client.playing:
-        data = client.get_state()
-        if isinstance(data, game.Board):
-            print_board(data.board)
-            for i in range(4):
-                for j in range(4):
-                    if data.board[i][j] != 0:
-                        data.board[i][j] = int(math.log2(data.board[i][j]))
-            client.make_move(movename(find_best_move(data.board)))
-        elif isinstance(data, game.Game):
-            print("Game over!")
-        elif isinstance(data, game.Result):
-            print("Session over!")
-            break
-
-if __name__ == '__main__':
-    play_game()
