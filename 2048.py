@@ -8,7 +8,7 @@ import ctypes
 import math
 import time
 import os
-
+import game
 
 # Enable multithreading?
 MULTITHREAD = True
@@ -20,7 +20,7 @@ for suffix in ['so', 'dll', 'dylib']:
     ailib = ctypes.CDLL(dllfn)
     break
 else:
-    print("Couldn't find 2048 library. Make sure to build it first.")
+    print("Couldn't find 2048 library bin/2048.{so,dll,dylib}! Make sure to build it first.")
     exit()
 
 ailib.init_tables()
@@ -53,6 +53,12 @@ def _to_score(c):
 def to_score(m):
     return [[_to_score(c) for c in row] for row in m]
 
+def print_board(m):
+    for row in m:
+        for c in row:
+            print('%8d' % c, end=' ')
+        print()
+
 if MULTITHREAD:
     from multiprocessing.pool import ThreadPool
     pool = ThreadPool(4)
@@ -74,30 +80,23 @@ else:
 def movename(move):
     return ['up', 'down', 'left', 'right'][move]
 
-def play_game(gamectrl):
-    moveno = 0
-    start = time.time()
-    while 1:
-        state = gamectrl.get_status()
-        if state == 'ended':
+def play_game():
+    account = "ayakain5rolls"
+    quiz = 1
+    client = game.Client(account, quiz)
+    while client.playing:
+        data = client.get_state()
+        if isinstance(data, game.Board):
+            for i in range(4):
+                for j in range(4):
+                    if data.board[i][j] != 0:
+                        data.board[i][j] = int(math.log2(data.board[i][j]))
+            client.make_move(movename(find_best_move(data.board)))
+        elif isinstance(data, game.Game):
+            print("Game over!")
+        elif isinstance(data, game.Result):
+            print("Session over!")
             break
 
-        moveno += 1
-        board = gamectrl.get_board()
-        move = find_best_move(board)
-        if move < 0:
-            break
-        print("%010.6f: Score %d, Move %d: %s" % (time.time() - start, gamectrl.get_score(), moveno, movename(move)))
-        gamectrl.execute_move(move)
-
-    score = gamectrl.get_score()
-    board = gamectrl.get_board()
-    maxval = max(max(row) for row in to_val(board))
-    print("Game over. Final score %d; highest tile %d." % (score, maxval))
-
-from edgectrl import ChromeDebuggerControl
-ctrl = ChromeDebuggerControl(9222)
-
-def main():
-    play_game(ctrl)
-
+if __name__ == '__main__':
+    play_game()
