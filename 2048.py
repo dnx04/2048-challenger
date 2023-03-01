@@ -117,22 +117,10 @@ def parse_args(argv):
 
 def main(argv):
     args = parse_args(argv)
-
-    if args.browser == 'firefox':
-        from ffctrl import FirefoxDebuggerControl
-        if args.port is None:
-            args.port = 32000
-        ctrl = FirefoxDebuggerControl(args.port)
-    elif args.browser == 'firefox-rc':
-        from ffctrl import FirefoxRemoteControl
-        if args.port is None:
-            args.port = 32000
-        ctrl = FirefoxRemoteControl(args.port)
-    elif args.browser == 'chrome':
-        from chromectrl import ChromeDebuggerControl
-        if args.port is None:
-            args.port = 9222
-        ctrl = ChromeDebuggerControl(args.port)
+    from chromectrl import ChromeDebuggerControl
+    if args.port is None:
+        args.port = 9222
+    ctrl = ChromeDebuggerControl(args.port)
 
     if args.ctrlmode == 'keyboard':
         from gamectrl import Keyboard2048Control
