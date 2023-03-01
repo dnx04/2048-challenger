@@ -118,7 +118,7 @@ def main(argv):
     args = parse_args(argv)
     from chromectrl import ChromeDebuggerControl
     if args.port is None:
-        args.port = 9222
+        args.port = 1901
     ctrl = ChromeDebuggerControl(args.port)
 
     from gamectrl import Hybrid2048Control
