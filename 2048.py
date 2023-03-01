@@ -8,7 +8,7 @@ import ctypes
 import math
 import time
 import os
-import game
+
 
 # Enable multithreading?
 MULTITHREAD = True
@@ -20,7 +20,7 @@ for suffix in ['so', 'dll', 'dylib']:
     ailib = ctypes.CDLL(dllfn)
     break
 else:
-    print("Couldn't find 2048 library bin/2048.{so,dll,dylib}! Make sure to build it first.")
+    print("Couldn't find 2048 library. Make sure to build it first.")
     exit()
 
 ailib.init_tables()
@@ -73,4 +73,31 @@ else:
 
 def movename(move):
     return ['up', 'down', 'left', 'right'][move]
+
+def play_game(gamectrl):
+    moveno = 0
+    start = time.time()
+    while 1:
+        state = gamectrl.get_status()
+        if state == 'ended':
+            break
+
+        moveno += 1
+        board = gamectrl.get_board()
+        move = find_best_move(board)
+        if move < 0:
+            break
+        print("%010.6f: Score %d, Move %d: %s" % (time.time() - start, gamectrl.get_score(), moveno, movename(move)))
+        gamectrl.execute_move(move)
+
+    score = gamectrl.get_score()
+    board = gamectrl.get_board()
+    maxval = max(max(row) for row in to_val(board))
+    print("Game over. Final score %d; highest tile %d." % (score, maxval))
+
+from edgectrl import ChromeDebuggerControl
+ctrl = ChromeDebuggerControl(9222)
+
+def main():
+    play_game(ctrl)
 
