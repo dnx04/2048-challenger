@@ -499,41 +499,6 @@ int find_best_move(board_t board)
     return bestmove;
 }
 
-int ask_for_move(board_t board)
-{
-    int move;
-    char validstr[5];
-    char *validpos = validstr;
-
-    for (move = 0; move < 4; move++)
-    {
-        if (execute_move(move, board) != board)
-            *validpos++ = "UDLR"[move];
-    }
-    *validpos = 0;
-    if (validpos == validstr)
-        return -1;
-
-    while (1)
-    {
-        char movestr[64];
-        const char *allmoves = "UDLR";
-
-        printf("Move [%s]? ", validstr);
-
-        if (!fgets(movestr, sizeof(movestr) - 1, stdin))
-            return -1;
-
-        if (!strchr(validstr, toupper(movestr[0])))
-        {
-            printf("Invalid move.\n");
-            continue;
-        }
-
-        return strchr(allmoves, toupper(movestr[0])) - allmoves;
-    }
-}
-
 int main()
 {
     init_tables();

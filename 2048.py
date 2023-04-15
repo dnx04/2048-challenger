@@ -104,22 +104,10 @@ def play_game(gamectrl):
     maxval = max(max(row) for row in to_val(board))
     print("Game over. Final score %d; highest tile %d." % (score, maxval))
 
-def parse_args(argv):
-    import argparse
-
-    parser = argparse.ArgumentParser(description="Use the AI to play 2048 via browser control")
-    parser.add_argument('-p', '--port', help="Port number to control on (default: 32000 for Firefox, 9222 for Chrome)", type=int)
-    parser.add_argument('-b', '--browser', help="Browser you're using. Only Firefox with remote debugging, Firefox with the Remote Control extension (deprecated), and Chrome with remote debugging, are supported right now.", default='firefox', choices=('firefox', 'firefox-rc', 'chrome'))
-    parser.add_argument('-k', '--ctrlmode', help="Control mode to use. If the browser control doesn't seem to work, try changing this.", default='hybrid', choices=('keyboard', 'fast', 'hybrid'))
-
-    return parser.parse_args(argv)
-
 def main(argv):
-    args = parse_args(argv)
     from chromectrl import ChromeDebuggerControl
-    if args.port is None:
-        args.port = 1901
-    ctrl = ChromeDebuggerControl(args.port)
+    port = 32768
+    ctrl = ChromeDebuggerControl(port)
 
     from gamectrl import Hybrid2048Control
     gamectrl = Hybrid2048Control(ctrl)
