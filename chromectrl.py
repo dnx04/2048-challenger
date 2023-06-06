@@ -1,31 +1,14 @@
 from __future__ import print_function
 import json, threading, itertools
 
-try:
-    import websocket
-except ImportError:
-    websocket = None
-
-# Python 3 compatibility
-try:
-    from urllib2 import urlopen
-except ImportError:
-    from urllib.request import urlopen
-
-try:
-    input = raw_input
-except NameError:
-    pass
+import websocket
+from urllib.request import urlopen
 
 class ChromeDebuggerControl(object):
     ''' Control Chrome using the debugging socket.
     Chrome must be launched using the --remote-debugging-port=<port> option for this to work! '''
 
     def __init__(self, port):
-        if websocket is None:
-            raise NotImplementedError("websocket-client library not available; cannot control Chrome.\n"
-                                      "Please install it (pip install websocket-client) then try again.")
-
         # Obtain the list of pages
         pages = json.loads(urlopen('http://localhost:%d/json/list' % port).read())
         if len(pages) == 0:
@@ -48,6 +31,7 @@ class ChromeDebuggerControl(object):
                     print("Invalid selection:", e)
 
         # Configure debugging websocket
+        websocket.enableTrace(True)
         wsurl = page['webSocketDebuggerUrl']
         self.ws = websocket.create_connection(wsurl)
 
